@@ -1,5 +1,4 @@
 const {faker} = require('@faker-js/faker');
-const boom = require("@hapi/boom")
 
 class Products{
   constructor(){
@@ -19,7 +18,7 @@ class Products{
     return this.data;
   }
 
-  createOne(data){
+  async createOne(data){
     let product = {};
     product.id = faker.datatype.uuid().toString();
     product.name = data.name;
@@ -29,7 +28,7 @@ class Products{
     return product;
   }
 
-  findOne(id){
+  async findOne(id){
     let product = this.data.find((prod) =>{
       return prod.id === id;
     });
@@ -49,7 +48,7 @@ class Products{
     }
   }
 
-  updateOne(id, changes){
+  async updateOne(id, changes){
     const index = this.data.findIndex(prod => prod.id === id);
     if(index === -1){
       throw new Error("Incorrect Id")

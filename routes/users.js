@@ -1,40 +1,110 @@
-const express=require('express');
-const faker=require('faker');
-const router=express.Router();
+const express = require('express');
+const users = require('../services/users');
+const {successResponse} = require('../response');
+const dataValidator = require('../middlewears/dataValidation');
+const { getUserSchema, updateUserSchema, createUserSchema } = require('../schemas/usersSchema');
+const router = express.Router();
 
-router.get('/',(req,res)=>{
-  const products=[];const{size}=req.query;
-  const limit=size||10;
-  for(let index=0;index<limit;index++){
-    products.push({name:faker.commerce.productName(),
-      price:parseInt(faker.commerce.price(),10),
-      image:faker.image.imageUrl(),});
+
+
+router.get('/', async (req, res, next)=>{
+  try{
+    const data = await users.getDataBase();
+    res.body = data;
+    successResponse(req, res, {
+      status: 200,
+      message: 'Users'
+    })
+  }catch(err){
+    err.message = "Couldnt load data";
+    res.status = 500;
+    next(err);
+  }
+})
+
+router.get('/:id',
+  dataValidator(getUserSchema, 'params'),
+  async (req, res, next)=>{
+  try{
+    const user = await users.findOne(req.params.id);
+    res.body= user;
+    successResponse(req, res, {
+      status: 200,
+      message: 'User'
+    })
+  }catch(err){
+      res.status(404);
+      next(err);
+  }
+})
+
+router.post('/',
+  dataValidator(createUserSchema, 'body'),
+  async (req, res, next)=>{
+  try{
+    const user = await users.createOne(req.body);
+    res.body = user;
+    successResponse(req, res, {
+      status: 201,
+      message: 'User successfully created'
+    })
+  }catch(err){
+    res.status(500);
+    err.message('Couldnt create User');
+    next(err);
+  }
+})
+
+router.put('/:id',
+  dataValidator(getUserSchema, 'params'),
+  dataValidator(createUserSchema, 'body'),
+  async (req, res, next)=>{
+  try{
+    const user = await users.updateOne(req.params.id, req.body);
+    res.body = user;
+    successResponse(req, res, {
+      status: 201,
+      message: 'User successfully updated'
+    });
+  }catch(err){
+    res.status(404);
+    next(err);
+  }
+})
+
+router.patch('/:id',
+  dataValidator(getUserSchema, 'params'),
+  dataValidator(updateUserSchema, 'body'),
+  async (req, res, next)=>{
+    try{
+      const user = await users.updateOne(req.params.id, req.body);
+      res.body = user;
+      successResponse(req, res, {
+        status: 201,
+        message: 'User successfully updated'
+      });
+    }catch(err){
+      res.status(404);
+      next(err);
     }
-  res.json(products);
-});
+})
 
-router.get('/filter',(req,res)=>{
-  res.send('Yo soy un filter');
-});
-router.get('/:id',(req,res)=>{
-  const{id}=req.params;
-  res.json({id,name:'Product 2',price:2000});
-});
-
-router.post('/',(req,res)=>{
-  const body=req.body;
-  res.json({message:'created',data:body});
-});
-
-router.patch('/:id',(req,res)=>{
-  const{id}=req.params;const body=req.body;
-  res.json({message:'update',data:body,id,});
-});
-
-router.delete('/:id',(req,res)=>{
-  const{id}=req.params;
-  res.json({message:'deleted',id,});
-});
+router.delete('/:id',
+  dataValidator(getUserSchema, 'params'),
+  async (req, res, next)=>{
+  try{
+    const user = await users.deleteOne(req.params.id);
+    res.body = user;
+    console.log(res.body);
+    successResponse(req, res, {
+      status: 201,
+      message: 'User successfully deleted'
+    });
+  }catch(err){
+    res.status(404);
+    next(err);
+  }
+})
 
 
-module.exports=router;
+module.exports = router;
