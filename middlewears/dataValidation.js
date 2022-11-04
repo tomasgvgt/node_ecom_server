@@ -12,4 +12,3 @@ function dataValidator(schema, property){
 }
 
 module.exports = dataValidator;
-
