@@ -7,8 +7,9 @@ const {sendError, boomErrorHandler} = require('./middlewears/errorhandler');
 const cors = require('cors');
 
 
-let allowedOrigins = ["http://localhost:8080", "http://localhost:8080", "http://testsite.com"];
+let allowedOrigins = ["http://localhost:8080"];
 
+//cors configuration
 app.use(cors({
   origin: (origin, callback) => {
     if(!origin) return callback(null, true);
@@ -20,14 +21,17 @@ app.use(cors({
   }
 }));
 
-0
 
-
+//Valid request body formats
 app.use(express.json());
+
+//Serve static files
 app.use('/', express.static(path.join(__dirname, 'public')));
 
+//Use designed router
 routes(app);
 
+//Error Middlewears
 app.use(boomErrorHandler);
 app.use(sendError);
 
