@@ -3,7 +3,7 @@ const path = require('path');
 const port = process.env.PORT || 3000;
 const app = express();
 const routes = require('./routes');
-const {sendError, boomErrorHandler} = require('./middlewears/errorhandler');
+const {sendError, boomErrorHandler, sequelizeErrorHandler} = require('./middlewears/errorhandler');
 const cors = require('cors');
 
 
@@ -32,6 +32,7 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 routes(app);
 
 //Error Middlewears
+app.use(sequelizeErrorHandler);
 app.use(boomErrorHandler);
 app.use(sendError);
 

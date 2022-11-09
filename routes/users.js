@@ -49,8 +49,7 @@ router.post('/',
       message: 'User successfully created'
     })
   }catch(err){
-    res.status(500);
-    err.message('Couldnt create User');
+    console.log(err);
     next(err);
   }
 })

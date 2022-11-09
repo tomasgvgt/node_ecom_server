@@ -2,8 +2,8 @@ const Joi = require('joi');
 
 
 const id = Joi.string();
-const name = Joi.string().alphanum();
-const age = Joi.number().min(18);
+const name = Joi.string();
+const email = Joi.string();
 
 const getUserSchema = Joi.object({
   id: id.required()
@@ -12,12 +12,12 @@ const getUserSchema = Joi.object({
 const updateUserSchema = Joi.object({
   id,
   name,
-  age
+  email
 });
 
 const createUserSchema = Joi.object({
   name: name.required(),
-  age: age.required()
+  email: email.required()
 });
 
 
