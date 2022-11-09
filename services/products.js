@@ -1,65 +1,49 @@
 const {faker} = require('@faker-js/faker');
-
+const Boom = require('@hapi/boom');
+const Product = require('../models/sequelize/products')
 class Products{
-  constructor(){
-    this.data = [];
-    this.create();
-  }
-  create(){
-    for(let i = 0; i < 5; i++){
-      let product = {
-        id: faker.datatype.uuid().toString(),
-        name: faker.commerce.productName(),
-        price: faker.commerce.price().toString(),
-        img: faker.image.imageUrl(),
-      }
-      this.data.push(product);
-    }
+  constructor(){}
+
+  async getDataBase(){
+    this.data = await Product.findAll();
     return this.data;
-  }
+    }
 
   async createOne(data){
-    let product = {};
-    product.id = faker.datatype.uuid().toString();
-    product.name = data.name;
-    product.price = data.price;
-    product.img = data.img;
-    this.data.push(product);
+    const product = await Product.create(data)
     return product;
   }
 
-  async findOne(id){
-    let product = this.data.find((prod) =>{
-      return prod.id === id;
+  async findOne(productId){
+    let product = await Product.findAll({
+      where: {id: productId}
     });
-    if(product){
-      return product;
+    if(product.length === 0){
+      throw Boom.notFound("Incorrect Id");
     }
-    throw new Error("Incorrect Id");
+    return product;
   }
 
-  async deleteOne(id){
-    for(let i = 0; i < this.data.length; i++){
-      if(this.data[i].id === id){
-        const product = this.data[i];
-        this.data.splice(i, 1);
-        return product;
-      }
+  async deleteOne(productId){
+    const deleted = await Product.destroy({
+      where: {id: productId}
+    })
+    if(deleted === 0){
+      throw Boom.notFound("Id not found");
     }
+    return deleted;
   }
 
-  async updateOne(id, changes){
-    const index = this.data.findIndex(prod => prod.id === id);
-    if(index === -1){
-      throw new Error("Incorrect Id")
+  async updateOne(productId, changes){
+    let product = await Product.update(changes, {
+      where: {id: productId}
+    });
+    product = product[0];
+    if(product === 0){
+      throw Boom.notFound('Id not found');
     }
-    this.data[index] = {
-      ...this.data[index],
-      ...changes
-    }
-    return this.data[index];
+    return product;
   }
-
 }
 
 //Create an instance to produce a singleton. So when imported it will always be thesame instance of the class Products.

@@ -5,24 +5,15 @@ const {successResponse} = require('../response');
 const { createProductSchema, updateProductSchema, getProductSchema } = require('../schemas/productsSchema');
 const dataValidator = require('../middlewears/dataValidation');
 
-router.get('/', (req, res, next)=>{
+router.get('/', async (req, res, next)=>{
   try{
-    let {limit} = req.query;
-    let size = limit ? limit : 100;
-    let prods = [];
-    if(size > 0 && size != 100){
-      for(i = 0; i < size; i++){
-        prods.push(products.data[i]);
-      }
-    }else{
-      prods = products.data;
-    }
-    res.body = prods;
-    successResponse(req, res, {
-      status: 200,
-      message: "Products"
-    })
-  }catch(err){
+      let prods = await products.getDataBase();
+      res.body = prods;
+      successResponse(req, res, {
+        status: 200,
+        message: "Products"
+      })
+    }catch(err){
     err.message = "Couldn't load products, please try again later";
     res.status(404);
     next(err);
@@ -41,8 +32,6 @@ router.get('/:id',
         message: `Product`
       });
     }catch(err){
-      err.message = "Product doesn't exist, send a correct Id";
-      res.status(404)
       next(err);
     }
 })
@@ -63,16 +52,13 @@ router.delete('/:id',
  async (req, res, next)=>{
   try{
     let id = req.params.id;
-    let deleted = await products.deleteOne(id);
-    res.body = deleted;
+    await products.deleteOne(id);
+    res.body = id;
     successResponse(req, res,{
       status: 201,
-      message: `product succesfully deleted`
+      message: `product ${id} succesfully deleted`
       });
   }catch(err){
-    console.error(err.message);
-    err.message = "Product doesnt exist, send correct Id"
-    res.status = 404;
     next(err);
   }
 })
@@ -84,14 +70,12 @@ router.put('/:id',
     try{
       let id = req.params.id;
       const product = await products.updateOne(id, req.body);
-      res.body = product;
+      res.body = id;
       successResponse(req, res,{
         status: 201,
-        message: `Product successfully changed`
+        message: `Product ${id} successfully updated`
     });
     }catch(err){
-      console.error(err.message);
-      res.status(404);
       next(err);
     }
 })
@@ -103,15 +87,12 @@ router.patch('/:id',
   try{
     let id = req.params.id;
     const product = await products.updateOne(id, req.body);
-    res.body = product;
+    res.body = id;
     successResponse(req, res,{
       status: 201,
-      message: `Product successfully changed`
+      message: `Product ${id} successfully updated`
   });
   }catch(err){
-    console.error(err.message);
-    err.message = "Product doesnt exist, send correct Id";
-    res.status(404);
     next(err);
   }
 })

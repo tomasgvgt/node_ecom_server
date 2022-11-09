@@ -61,10 +61,10 @@ router.put('/:id',
   async (req, res, next)=>{
   try{
     const user = await users.updateOne(req.params.id, req.body);
-    res.body = user;
+    res.body = req.params.id;
     successResponse(req, res, {
       status: 201,
-      message: 'User successfully updated'
+      message: `User ${req.params.id} successfully updated`
     });
   }catch(err){
     res.status(404);
@@ -78,10 +78,10 @@ router.patch('/:id',
   async (req, res, next)=>{
     try{
       const user = await users.updateOne(req.params.id, req.body);
-      res.body = user;
+      res.body = req.params.id;
       successResponse(req, res, {
         status: 201,
-        message: 'User successfully updated'
+        message: `User ${req.params.id} successfully updated`
       });
     }catch(err){
       res.status(404);
@@ -94,11 +94,11 @@ router.delete('/:id',
   async (req, res, next)=>{
   try{
     const user = await users.deleteOne(req.params.id);
-    res.body = user;
+    res.body = req.params.id;
     console.log(res.body);
     successResponse(req, res, {
       status: 201,
-      message: 'User successfully deleted'
+      message: `User ${req.params.id} successfully deleted`
     });
   }catch(err){
     res.status(404);
