@@ -1,21 +1,21 @@
 const {faker} = require('@faker-js/faker');
 const Boom = require('@hapi/boom');
-const Product = require('../models/sequelize/products')
+const db = require('../models')
 class Products{
   constructor(){}
 
   async getDataBase(){
-    this.data = await Product.findAll();
+    this.data = await db.Product.findAll();
     return this.data;
     }
 
   async createOne(data){
-    const product = await Product.create(data)
+    const product = await db.Product.create(data)
     return product;
   }
 
   async findOne(productId){
-    let product = await Product.findAll({
+    let product = await db.Product.findAll({
       where: {id: productId}
     });
     if(product.length === 0){
@@ -25,7 +25,7 @@ class Products{
   }
 
   async deleteOne(productId){
-    const deleted = await Product.destroy({
+    const deleted = await sequelize.Product.destroy({
       where: {id: productId}
     })
     if(deleted === 0){
@@ -35,7 +35,7 @@ class Products{
   }
 
   async updateOne(productId, changes){
-    let product = await Product.update(changes, {
+    let product = await sequelize.Product.update(changes, {
       where: {id: productId}
     });
     product = product[0];

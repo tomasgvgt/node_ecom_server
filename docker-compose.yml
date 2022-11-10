@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: my_store
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+    # <Port exposed> : < MySQL Port running inside container>
+      - "5432:5432"
+    volumes:
+      - "~/postgres_data:/var/lib/postgresql/data"
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: my_store
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin123
+      MYSQL_ROOT_PASSWORD: admin123
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3306:3306'
+    volumes:
+      - "~/mysql_data:/var/lib/mysql"

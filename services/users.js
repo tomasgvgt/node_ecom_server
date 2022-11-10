@@ -1,20 +1,20 @@
 const Boom = require('@hapi/boom');
-const User = require('../models/sequelize/users');
+const db = require('../models');
 class Users{
   constructor(){
   }
   async getDataBase(){
-    this.data = await User.findAll();
+    this.data = await db.User.findAll();
     return this.data;
   }
 
   async createOne(userInfo){
-    let user = await User.create(userInfo);
+    let user = await db.User.create(userInfo);
     return user;
   }
 
   async findOne(userId){
-    let user = await User.findAll({
+    let user = await db.User.findAll({
       where: {id: userId}
     });
     if(user.length === 0){
@@ -34,7 +34,7 @@ class Users{
   }
 
   async updateOne(userId, changes){
-    let user = await User.update(changes, {
+    let user = await db.User.update(changes, {
       where: {id: userId}
     })
     user = user[0];
