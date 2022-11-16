@@ -4,19 +4,31 @@ const db = require('../models')
 class Products{
   constructor(){}
 
-  async getDataBase(){
-    this.data = await db.Product.findAll();
+  async getDataBase(params){
+    console.log(params)
+    const options = {
+      include: 'Category'
+    }
+    if(params.offset && params.limit){
+      options.limit = params.limit,
+      options.offset = params.offset
+    }
+    console.log(options)
+    this.data = await db.Product.findAll(options);
     return this.data;
     }
 
   async createOne(data){
-    const product = await db.Product.create(data)
+    const product = await db.Product.create(data, {
+      include: 'Category',
+    })
     return product;
   }
 
   async findOne(productId){
     let product = await db.Product.findAll({
-      where: {id: productId}
+      where: {id: productId},
+      include: 'Category'
     });
     if(product.length === 0){
       throw Boom.notFound("Incorrect Id");

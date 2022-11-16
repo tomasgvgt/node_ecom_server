@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const products = require('../services/products')
 const {successResponse} = require('../response');
-const { createProductSchema, updateProductSchema, getProductSchema } = require('../schemas/productsSchema');
+const { createProductSchema, updateProductSchema, getProductSchema, paginationSchema } = require('../schemas/productsSchema');
 const dataValidator = require('../middlewears/dataValidation');
 
 router.get('/', async (req, res, next)=>{
   try{
-      let prods = await products.getDataBase();
+      let prods = await products.getDataBase(req.query);
       res.body = prods;
       successResponse(req, res, {
         status: 200,

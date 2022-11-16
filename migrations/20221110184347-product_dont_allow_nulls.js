@@ -1,7 +1,9 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
+    await queryInterface.dropTable('Products');
     await queryInterface.createTable('Products', {
       id: {
         allowNull: false,
@@ -10,11 +12,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       price: {
-        type: DataTypes.SMALLINT,
+        type: Sequelize.SMALLINT,
         allowNull: false,
       },
       createdAt: {
@@ -27,7 +29,13 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Products');
+
+  async down (queryInterface, Sequelize) {
+    /**
+     * Add reverting commands here.
+     *
+     * Example:
+     * await queryInterface.dropTable('users');
+     */
   }
 };

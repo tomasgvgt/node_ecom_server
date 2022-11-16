@@ -4,7 +4,9 @@ class Users{
   constructor(){
   }
   async getDataBase(){
-    this.data = await db.User.findAll();
+    this.data = await db.User.findAll({
+      include: 'Customer',
+    });
     return this.data;
   }
 
@@ -15,7 +17,8 @@ class Users{
 
   async findOne(userId){
     let user = await db.User.findAll({
-      where: {id: userId}
+      where: {id: userId},
+      include: 'Customer'
     });
     if(user.length === 0){
       throw Boom.notFound('Id not found');

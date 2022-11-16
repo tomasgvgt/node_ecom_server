@@ -7,6 +7,7 @@ const {sendError, boomErrorHandler, sequelizeErrorHandler} = require('./middlewe
 const cors = require('cors');
 
 
+
 let allowedOrigins = ["http://localhost:8080"];
 
 //cors configuration

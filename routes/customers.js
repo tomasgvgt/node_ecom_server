@@ -1,19 +1,19 @@
 const express = require('express');
-const categories = require('../services/categories');
+const customers = require('../services/customers');
 const {successResponse} = require('../response');
 const dataValidator = require('../middlewears/dataValidation');
-const { getCategorySchema, updateCategorySchema, createCategorySchema } = require('../schemas/categoriesSchema');
+const { getCustomerSchema, updateCustomerSchema, createCustomerSchema } = require('../schemas/customersSchema');
 const router = express.Router();
 
 
 
 router.get('/', async (req, res, next)=>{
   try{
-    const data = await categories.getDataBase();
+    const data = await customers.getDataBase();
     res.body = data;
     successResponse(req, res, {
       status: 200,
-      message: 'Categories'
+      message: 'Customers'
     })
   }catch(err){
     err.message = "Couldnt load data";
@@ -23,14 +23,14 @@ router.get('/', async (req, res, next)=>{
 })
 
 router.get('/:id',
-  dataValidator(getCategorySchema, 'params'),
+  dataValidator(getCustomerSchema, 'params'),
   async (req, res, next)=>{
   try{
-    const category = await categories.findOne(req.params.id);
-    res.body= category;
+    const user = await customers.findOne(req.params.id);
+    res.body= user;
     successResponse(req, res, {
       status: 200,
-      message: 'Category'
+      message: 'Customer'
     })
   }catch(err){
       res.status(404);
@@ -39,14 +39,14 @@ router.get('/:id',
 })
 
 router.post('/',
-  dataValidator(createCategorySchema, 'body'),
+  dataValidator(createCustomerSchema, 'body'),
   async (req, res, next)=>{
   try{
-    const category = await categories.createOne(req.body);
-    res.body = category;
+    const user = await customers.createOne(req.body);
+    res.body = user;
     successResponse(req, res, {
       status: 201,
-      message: 'Category successfully created'
+      message: 'Customer successfully created'
     })
   }catch(err){
     console.log(err);
@@ -55,15 +55,15 @@ router.post('/',
 })
 
 router.put('/:id',
-  dataValidator(getCategorySchema, 'params'),
-  dataValidator(createCategorySchema, 'body'),
+  dataValidator(getCustomerSchema, 'params'),
+  dataValidator(createCustomerSchema, 'body'),
   async (req, res, next)=>{
   try{
-    const category = await categories.updateOne(req.params.id, req.body);
+    const user = await customers.updateOne(req.params.id, req.body);
     res.body = req.params.id;
     successResponse(req, res, {
       status: 201,
-      message: `Category ${req.params.id} successfully updated`
+      message: `Customer ${req.params.id} successfully updated`
     });
   }catch(err){
     res.status(404);
@@ -72,15 +72,15 @@ router.put('/:id',
 })
 
 router.patch('/:id',
-  dataValidator(getCategorySchema, 'params'),
-  dataValidator(updateCategorySchema, 'body'),
+  dataValidator(getCustomerSchema, 'params'),
+  dataValidator(updateCustomerSchema, 'body'),
   async (req, res, next)=>{
     try{
-      const category = await categories.updateOne(req.params.id, req.body);
+      const user = await customers.updateOne(req.params.id, req.body);
       res.body = req.params.id;
       successResponse(req, res, {
         status: 201,
-        message: `Category ${req.params.id} successfully updated`
+        message: `Customer ${req.params.id} successfully updated`
       });
     }catch(err){
       res.status(404);
@@ -89,15 +89,15 @@ router.patch('/:id',
 })
 
 router.delete('/:id',
-  dataValidator(getCategorySchema, 'params'),
+  dataValidator(getCustomerSchema, 'params'),
   async (req, res, next)=>{
   try{
-    const category = await categories.deleteOne(req.params.id);
+    const user = await customers.deleteOne(req.params.id);
     res.body = req.params.id;
     console.log(res.body);
     successResponse(req, res, {
       status: 201,
-      message: `Category ${req.params.id} successfully deleted`
+      message: `Customer ${req.params.id} successfully deleted`
     });
   }catch(err){
     res.status(404);
