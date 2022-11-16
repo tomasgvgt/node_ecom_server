@@ -1,0 +1,31 @@
+{
+  "development": {
+    "username": "admin",
+    "password": "admin123",
+    "database": "my_store",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "admin",
+    "password": "admin123",
+    "database": "my_store",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "admin",
+    "password": "admin123",
+    "database": "my_store",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "use_env_variable": "DATABASE_URL",
+    "dialectOptions": {
+        "ssl": {
+         "require": true,
+         "rejectUnauthorized": false
+        }
+      }
+  }
+}
+
