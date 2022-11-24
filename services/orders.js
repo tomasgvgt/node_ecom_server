@@ -1,5 +1,5 @@
 const Boom = require('@hapi/boom');
-const db = require('../models')
+const db = require('../db/models')
 class Orders{
   constructor(){}
   async getDataBase(){

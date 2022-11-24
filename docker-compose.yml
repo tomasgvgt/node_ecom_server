@@ -5,8 +5,8 @@ services:
     image: postgres:latest
     environment:
       - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
     ports:
     # <Port exposed> : < MySQL Port running inside container>
-      - "5431:5432"
+      - "5432:5432"

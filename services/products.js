@@ -1,6 +1,6 @@
 const {faker} = require('@faker-js/faker');
 const Boom = require('@hapi/boom');
-const db = require('../models')
+const db = require('../db/models')
 class Products{
   constructor(){}
 

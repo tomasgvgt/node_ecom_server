@@ -1,6 +1,5 @@
 const Boom = require('@hapi/boom');
-const db = require('../models');
-const category = require('../models/category');
+const db = require('../db/models');
 class Categories{
   constructor(){}
 
