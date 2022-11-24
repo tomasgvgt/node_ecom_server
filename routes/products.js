@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const products = require('../services/products')
-const {successResponse} = require('../response');
+const {successResponse} = require('../middlewears/response');
 const { createProductSchema, updateProductSchema, getProductSchema, paginationSchema } = require('../schemas/productsSchema');
 const dataValidator = require('../middlewears/dataValidation');
 

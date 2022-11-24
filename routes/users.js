@@ -1,6 +1,6 @@
 const express = require('express');
 const users = require('../services/users');
-const {successResponse} = require('../response');
+const {successResponse} = require('../middlewears/response');
 const dataValidator = require('../middlewears/dataValidation');
 const { getUserSchema, updateUserSchema, createUserSchema } = require('../schemas/usersSchema');
 const router = express.Router();
