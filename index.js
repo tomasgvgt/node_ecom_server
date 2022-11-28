@@ -1,11 +1,11 @@
 const express = require('express');
 const path = require('path');
-const port = process.env.PORT || 3000;
+const config = require('./config/config')
 const app = express();
 const routes = require('./routes');
 const {sendError, boomErrorHandler, sequelizeErrorHandler} = require('./middlewears/errorhandler');
 const cors = require('cors');
-
+const port = config.port;
 
 
 let allowedOrigins = ["http://localhost:8080"];
