@@ -1,11 +1,11 @@
 const express = require('express');
 const path = require('path');
-const config = require('./config/config')
 const app = express();
 const routes = require('./routes');
 const {sendError, boomErrorHandler, sequelizeErrorHandler} = require('./middlewears/errorhandler');
+const authentication = require('./middlewears/auth');
 const cors = require('cors');
-const port = config.port;
+const port = process.env.PORT || 3000;
 
 
 let allowedOrigins = ["http://localhost:8080"];
@@ -31,6 +31,14 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 
 //Use designed router
 routes(app);
+
+//Get request to verify authentication
+app.get('/auth-endpoint', authentication, (req, res, next)=>{
+  res.status(200);
+  res.send({
+    message: 'Welcome to the application'
+  });
+})
 
 //Error Middlewears
 app.use(sequelizeErrorHandler);
