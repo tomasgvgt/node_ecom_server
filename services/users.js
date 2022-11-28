@@ -1,5 +1,6 @@
 const Boom = require('@hapi/boom');
 const db = require('../db/models');
+const {encryptPassword} = require('../authentication/password')
 class Users{
   constructor(){
   }
@@ -11,7 +12,10 @@ class Users{
   }
 
   async createOne(userInfo){
+    let hash = await encryptPassword(userInfo.password);
+    userInfo.password = hash;
     let user = await db.User.create(userInfo);
+    delete user.dataValues.password;
     return user;
   }
 

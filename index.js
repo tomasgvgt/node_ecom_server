@@ -5,6 +5,7 @@ const routes = require('./routes');
 const {sendError, boomErrorHandler, sequelizeErrorHandler} = require('./middlewears/errorhandler');
 const authentication = require('./middlewears/auth');
 const cors = require('cors');
+require('dotenv').config();
 const port = process.env.PORT || 3000;
 
 
