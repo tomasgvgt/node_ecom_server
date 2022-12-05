@@ -4,6 +4,7 @@ const orders = require('../services/orders')
 const {successResponse} = require('../middlewears/response');
 const { createOrderSchema, addItemSchema, getOrderSchema } = require('../schemas/ordersSchema');
 const dataValidator = require('../middlewears/dataValidation');
+const passport = require('passport');
 
 router.get('/', async (req, res, next)=>{
   try{
@@ -37,6 +38,7 @@ router.get('/:id',
 })
 
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(createOrderSchema, 'body'),
   async (req, res, next)=>{
     let order = await orders.createOne(req.body);
@@ -48,6 +50,7 @@ router.post('/',
 })
 
 router.post('/add-item',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(addItemSchema, 'body'),
   async (req, res, next)=>{
     let item = await orders.addItem(req.body);
@@ -59,6 +62,7 @@ router.post('/add-item',
 })
 
 router.delete('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getOrderSchema, 'params'),
  async (req, res, next)=>{
   try{

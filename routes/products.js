@@ -4,8 +4,10 @@ const products = require('../services/products')
 const {successResponse} = require('../middlewears/response');
 const { createProductSchema, updateProductSchema, getProductSchema, paginationSchema } = require('../schemas/productsSchema');
 const dataValidator = require('../middlewears/dataValidation');
+const passport = require('../authentication/');
 
-router.get('/', async (req, res, next)=>{
+router.get('/',
+  async (req, res, next)=>{
   try{
       let prods = await products.getDataBase(req.query);
       res.body = prods;
@@ -37,6 +39,7 @@ router.get('/:id',
 })
 
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(createProductSchema, 'body'),
   async (req, res, next)=>{
     let prod = await products.createOne(req.body);
@@ -48,6 +51,7 @@ router.post('/',
 })
 
 router.delete('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getProductSchema, 'params'),
  async (req, res, next)=>{
   try{
@@ -64,6 +68,7 @@ router.delete('/:id',
 })
 
 router.put('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getProductSchema, 'params'),
   dataValidator(createProductSchema, 'body'),
   async (req, res, next)=>{
@@ -81,6 +86,7 @@ router.put('/:id',
 })
 
 router.patch('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getProductSchema, 'params'),
   dataValidator(updateProductSchema, 'body'),
   async (req, res, next)=>{

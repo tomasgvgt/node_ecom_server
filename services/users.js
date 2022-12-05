@@ -1,6 +1,7 @@
 const Boom = require('@hapi/boom');
 const db = require('../db/models');
-const {encryptPassword} = require('../authentication/password')
+const {encryptPassword} = require('../authentication/password');
+const { sequelize } = require('../db/models');
 class Users{
   constructor(){
   }
@@ -30,14 +31,28 @@ class Users{
     return user;
   }
 
+  async findByEmail(passedEmail){
+    let user = await db.User.findOne({
+      where: {email: passedEmail},
+      include: 'Customer'
+    });
+    return user;
+  }
+
   async deleteOne(userId){
-    let deleted = await User.destroy({
-      where: {id: userId}
+    let customer = await db.Customer.findOne({
+      where: {UserId: userId}
+    });
+    let deletedCustomer = await db.Customer.destroy({
+      where: {id: customer.id}
     })
-    if(deleted === 0){
+    let deletedUser = await db.User.destroy({
+      where: {id: userId},
+    });
+    if(deletedUser === 0 || deletedCustomer === 0){
       throw Boom.notFound('Id not found');
     }
-    return deleted;
+    return;
   }
 
   async updateOne(userId, changes){

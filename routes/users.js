@@ -4,10 +4,13 @@ const {successResponse} = require('../middlewears/response');
 const dataValidator = require('../middlewears/dataValidation');
 const { getUserSchema, updateUserSchema, createUserSchema } = require('../schemas/usersSchema');
 const router = express.Router();
+const passport = require('passport');
 
 
 
 router.get('/', async (req, res, next)=>{
+  //passport.autenticate
+  //Admin authorization
   try{
     const data = await users.getDataBase();
     res.body = data;
@@ -23,6 +26,8 @@ router.get('/', async (req, res, next)=>{
 })
 
 router.get('/:id',
+  //passport.autenticate
+  //Admin authorization, customer with Id authorization
   dataValidator(getUserSchema, 'params'),
   async (req, res, next)=>{
   try{
@@ -55,6 +60,8 @@ router.post('/',
 })
 
 router.put('/:id',
+  passport.authenticate('jwt', {session: false}),
+  //Admin authorization and user with id.
   dataValidator(getUserSchema, 'params'),
   dataValidator(createUserSchema, 'body'),
   async (req, res, next)=>{
@@ -72,6 +79,8 @@ router.put('/:id',
 })
 
 router.patch('/:id',
+  passport.authenticate('jwt', {session: false}),
+  //Admin authorization and user with Id
   dataValidator(getUserSchema, 'params'),
   dataValidator(updateUserSchema, 'body'),
   async (req, res, next)=>{
@@ -89,10 +98,12 @@ router.patch('/:id',
 })
 
 router.delete('/:id',
+  passport.authenticate('jwt', {session: false}),
+  //Admin authorization and user with Id
   dataValidator(getUserSchema, 'params'),
   async (req, res, next)=>{
   try{
-    const user = await users.deleteOne(req.params.id);
+    await users.deleteOne(req.params.id);
     res.body = req.params.id;
     console.log(res.body);
     successResponse(req, res, {

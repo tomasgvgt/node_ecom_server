@@ -4,6 +4,7 @@ const {successResponse} = require('../middlewears/response');
 const dataValidator = require('../middlewears/dataValidation');
 const { getCustomerSchema, updateCustomerSchema, createCustomerSchema } = require('../schemas/customersSchema');
 const router = express.Router();
+const passport = require('passport');
 
 
 
@@ -55,6 +56,7 @@ router.post('/',
 })
 
 router.put('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getCustomerSchema, 'params'),
   dataValidator(createCustomerSchema, 'body'),
   async (req, res, next)=>{
@@ -72,6 +74,7 @@ router.put('/:id',
 })
 
 router.patch('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getCustomerSchema, 'params'),
   dataValidator(updateCustomerSchema, 'body'),
   async (req, res, next)=>{
@@ -89,6 +92,7 @@ router.patch('/:id',
 })
 
 router.delete('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getCustomerSchema, 'params'),
   async (req, res, next)=>{
   try{

@@ -4,6 +4,7 @@ const {successResponse} = require('../middlewears/response');
 const dataValidator = require('../middlewears/dataValidation');
 const { getCategorySchema, updateCategorySchema, createCategorySchema } = require('../schemas/categoriesSchema');
 const router = express.Router();
+const passport = require('passport');
 
 
 
@@ -39,6 +40,7 @@ router.get('/:id',
 })
 
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(createCategorySchema, 'body'),
   async (req, res, next)=>{
   try{
@@ -55,6 +57,7 @@ router.post('/',
 })
 
 router.put('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getCategorySchema, 'params'),
   dataValidator(createCategorySchema, 'body'),
   async (req, res, next)=>{
@@ -72,6 +75,7 @@ router.put('/:id',
 })
 
 router.patch('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getCategorySchema, 'params'),
   dataValidator(updateCategorySchema, 'body'),
   async (req, res, next)=>{
@@ -89,12 +93,12 @@ router.patch('/:id',
 })
 
 router.delete('/:id',
+  passport.authenticate('jwt', {session: false}),
   dataValidator(getCategorySchema, 'params'),
   async (req, res, next)=>{
   try{
     const category = await categories.deleteOne(req.params.id);
     res.body = req.params.id;
-    console.log(res.body);
     successResponse(req, res, {
       status: 201,
       message: `Category ${req.params.id} successfully deleted`
